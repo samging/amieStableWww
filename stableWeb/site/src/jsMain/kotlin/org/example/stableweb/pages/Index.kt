@@ -76,6 +76,11 @@ import androidx.compose.runtime.DisposableEffectScope
 import com.varabyte.kobweb.compose.dom.disposableRef
 import com.varabyte.kobweb.compose.ui.modifiers.minHeight
 import org.jetbrains.compose.web.css.vh
+import kotlinx.browser.window
+import com.varabyte.kobweb.silk.components.icons.fa.FaCopy
+import com.varabyte.kobweb.silk.components.icons.fa.IconSize
+import org.jetbrains.compose.web.css.Color
+import org.jetbrains.compose.web.css.dpi
 
 @InitRoute
 fun initHomePage(ctx: InitRouteContext) {
@@ -104,18 +109,12 @@ private val downloadButtons = Modifier
 fun HomePage() {
     var circleRef by remember { mutableStateOf<HTMLElement?>(null) }
 
-    Box(
+    Column(
         modifier = Modifier
             .fillMaxSize()
             .minHeight(100.vh)
-            .position(Position.Relative)
-            .onMouseMove { event ->
-                val x = event.clientX
-                val y = event.clientY
-
-                circleRef?.style?.transform =
-                    "translate3d(${x}px, ${y}px, 0px) translate(-50%, -50%)"
-            }
+            .backgroundColor(Colors.Black),
+        verticalArrangement = Arrangement.SpaceBetween
     )
     {
 
@@ -142,7 +141,7 @@ fun HomePage() {
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .backgroundColor(Colors.White),
+                    .backgroundColor(Colors.Black),
                 contentAlignment = Alignment.CenterEnd
             )
             {
@@ -150,19 +149,113 @@ fun HomePage() {
                 Button(attrs = buttonModifier.toAttrs()) { Text("Documentation") }
                 Button(attrs = buttonModifier.toAttrs()) { Text("Examples") }
             }
-            Pipe("")
+            Box(modifier = Modifier.padding(left = 75.vh)) {
+                briefDescription()
+                downloadBox(Modifier)
+            }
         }
+        Pipe("", {briefExample(Modifier)})
+        footer()
     }
 }
 
-
 @Composable
-fun briefExample(modifier: Modifier) {
-    H3 {
-        Text("All it takes")
+fun footer(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()
+            .backgroundColor(Colors.Black)
+            .padding(left = 20.px, right = 20.px)
+            .margin(top = 220.px),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Span(
+                attrs = Modifier
+                    .color(Colors.White)
+                    .fontFamily("JakartaSans")
+                    .fontSize(14.px)
+                    .fontWeight(FontWeight.Bold)
+                    .margin(bottom = 8.px)
+                    .toAttrs()
+            ) {
+                Text("AMIE - ONNX Model Runtime Pipeline Manager")
+            }
+            Span(
+                attrs = Modifier
+                    .color(Colors.LightGray)
+                    .fontFamily("JakartaSans")
+                    .fontSize(12.px)
+                    .toAttrs()
+            ) {
+                Text("© 2025 AMIE. All rights reserved.")
+            }
+        }
     }
-    Span(attrs = Modifier.backgroundColor(Colors.Gray).toAttrs()) {
-        Text("1")
+}
+@Composable
+fun briefExample(modifier: Modifier = Modifier) {
+    Column(modifier = modifier) {
+        H3(attrs = Modifier.fontFamily("JakartaSans").margin(bottom = 12.px).toAttrs()) {
+            Text("Code snippet example")
+        }
+        Column(
+            modifier = Modifier
+                .backgroundColor(Colors.Black)
+                .color(Colors.White)
+                .fontFamily("monospace")
+                .fontSize(14.px)
+                .padding(all = 16.px)
+                .borderRadius(8.px)
+                .border(width = 1.px, style = LineStyle.Solid, color = Colors.DarkGray)
+        ) {
+            Row(modifier = Modifier.margin(bottom = 6.px), verticalAlignment = Alignment.CenterVertically) {
+                Span(attrs = Modifier.color(Colors.Gray).width(24.px).toAttrs()) {
+                    Text("1")
+                }
+                Span(attrs = Modifier.color(Colors.Cyan).margin(left = 8.px).toAttrs()) {
+                    Text("amie.init()")
+                }
+            }
+            Row(modifier = Modifier.margin(bottom = 6.px), verticalAlignment = Alignment.CenterVertically) {
+                Span(attrs = Modifier.color(Colors.Gray).width(24.px).toAttrs()) {
+                    Text("2")
+                }
+                Span(attrs = Modifier.color(Colors.White).margin(left = 8.px).toAttrs()) {
+                    Text("val constrains = listOf('greetings')")
+                }
+            }
+            Row(modifier = Modifier.margin(bottom = 12.px), verticalAlignment = Alignment.CenterVertically) {
+                Span(attrs = Modifier.color(Colors.Gray).width(24.px).toAttrs()) {
+                    Text("3")
+                }
+                Span(attrs = Modifier.color(Colors.White).margin(left = 8.px).toAttrs()) {
+                    Text("amie.argmax(constrains) { print('hi') }")
+                }
+            }
+            Row(
+                modifier = Modifier.margin(top = 8.px),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Button(attrs = Modifier
+                    .backgroundColor(Colors.White)
+                    .color(Colors.Black)
+                    .fontFamily("JakartaSans")
+                    .fontWeight(FontWeight.Bold)
+                    .padding(topBottom = 4.px, leftRight = 12.px)
+                    .borderRadius(4.px)
+                    .margin(right = 12.px)
+                    .toAttrs()
+                ) {
+                    Text("Documentation")
+                }
+                Span(attrs = Modifier.color(Colors.Gray).fontFamily("JakartaSans").fontSize(12.px).toAttrs()) {
+                    Text("Coming soon")
+                }
+            }
+        }
     }
 }
 
@@ -178,7 +271,7 @@ fun briefDescription(modifier: Modifier = Modifier) {
     ) {
         H1(
             attrs = Modifier
-                .color(Colors.Black)
+                .color(Colors.White)
                 .fontSize(32.px)
                 .fontWeight(FontWeight.Bold)
                 .margin(bottom = 12.px)
@@ -191,7 +284,7 @@ fun briefDescription(modifier: Modifier = Modifier) {
 
         P(
             attrs = Modifier
-                .color(Colors.DarkGray)
+                .color(Colors.LightGray)
                 .fontSize(16.px)
                 .lineHeight(1.5.em)
                 .margin(all = 0.px)
@@ -225,8 +318,8 @@ fun downloadBox(modifier: Modifier) {
     Box(
         modifier = Modifier
             .backgroundColor(Colors.Black)
-            .width(200.px)
-            .height(240.px)
+            .width(500.px)
+            .height(150.px)
             .padding(top = 30.px, left = 10.px)
     ) {
         Span(
@@ -241,8 +334,8 @@ fun downloadBox(modifier: Modifier) {
             Box(
             modifier = Modifier
                 .backgroundColor(Colors.White)
-                .width(190.px)
-                .height(220.px)
+                .width(490.px)
+                .height(120.px)
         ) {
                 Button(
                     attrs = downloadButtons
@@ -269,11 +362,33 @@ fun downloadBox(modifier: Modifier) {
                     Text("Git")
                 }
 
+
                 Box {
                     when (activeType) {
-                        DownloadType.BREW -> Text(brewDialog)
-                        DownloadType.CURL -> Text(curlDialog)
-                        DownloadType.GIT -> Text(gitDialog)
+                        DownloadType.BREW -> {
+                            Span(attrs = Modifier.fontFamily("JakartaSans").toAttrs()) {
+                                Text(brewDialog)
+                            }
+                            Button(
+                                attrs = Modifier
+                                    .onClick {
+                                        window.navigator.clipboard.writeText(brewDialog)
+                                    }
+                                    .toAttrs()
+                            ) {
+                                FaCopy()
+                            }
+                        }
+                        DownloadType.CURL -> {
+                            Span(attrs = Modifier.fontFamily("JakartaSans").toAttrs()) {
+                                Text(curlDialog)
+                            }
+                        }
+                        DownloadType.GIT -> {
+                            Span(attrs = Modifier.fontFamily("JakartaSans").toAttrs()) {
+                            Text(gitDialog)
+                            }
+                        }
                     }
                 }
             }
@@ -292,12 +407,22 @@ fun Pipe(txt: String, composableComponent: (@Composable (Modifier) -> Unit)? = n
             modifier = Modifier
                 .width(2.px)
                 .margin(leftRight = 50.px)
+                .padding(top = 10.px, bottom = 20.px)
                 .fillMaxHeight()
-                .backgroundColor(Colors.Black)
-        ) {}
-
+                .backgroundColor(Colors.White)
+        ) {
+            Img(
+                src = "astroWallpaper.png", attrs = Modifier
+                    .width(50.vh)
+                    .height(30.vh)
+                    .padding(top = 50.vh)
+                    .toAttrs()
+            )
+        }
+        Box {
         composableComponent?.invoke(Modifier)
         Text("$txt")
+    }
     }
 }
 
