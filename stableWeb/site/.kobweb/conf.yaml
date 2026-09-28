@@ -1,0 +1,14 @@
+site:
+  title: "StableWeb"
+
+server:
+  files:
+    dev:
+      contentRoot: "build/processedResources/js/main/public"
+      script: "build/kotlin-webpack/js/developmentExecutable/stableweb.js"
+      api: "build/libs/stableweb.jar"
+    prod:
+      script: "build/kotlin-webpack/js/productionExecutable/stableweb.js"
+      siteRoot: ".kobweb/site"
+
+  port: 8080
