@@ -149,14 +149,16 @@ fun HomePage() {
                 Button(attrs = buttonModifier.toAttrs()) { Text("Documentation") }
                 Button(attrs = buttonModifier.toAttrs()) { Text("Examples") }
             }
-            Box(modifier = Modifier.padding(left = 75.vh)) {
+            Box(modifier = Modifier.padding(left = 63.vh)) {
                 briefDescription()
                 downloadBox(Modifier)
             }
+
         }
-        Pipe("", {briefExample(Modifier)})
-        footer()
+        //Pipe("", {briefExample(Modifier)})
     }
+    footer()
+
 }
 
 @Composable
@@ -165,9 +167,9 @@ fun footer(modifier: Modifier = Modifier) {
         modifier = modifier
             .fillMaxWidth()
             .backgroundColor(Colors.Black)
-            .padding(left = 20.px, right = 20.px)
-            .margin(top = 220.px),
-        contentAlignment = Alignment.Center
+            //.padding(left = 20.px, right = 20.px)
+            //.margin(top = 220.px)
+        ,contentAlignment = Alignment.Center
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -197,7 +199,7 @@ fun footer(modifier: Modifier = Modifier) {
 }
 @Composable
 fun briefExample(modifier: Modifier = Modifier) {
-    Column(modifier = modifier) {
+    Box {
         H3(attrs = Modifier.fontFamily("JakartaSans").margin(bottom = 12.px).toAttrs()) {
             Text("Code snippet example")
         }
@@ -266,7 +268,7 @@ fun briefDescription(modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
             .maxWidth(600.px)
-            .padding(topBottom = 20.px, leftRight = 15.px),
+            .padding(topBottom = 20.px, leftRight = 20.px),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         H1(
@@ -275,7 +277,6 @@ fun briefDescription(modifier: Modifier = Modifier) {
                 .fontSize(32.px)
                 .fontWeight(FontWeight.Bold)
                 .margin(bottom = 12.px)
-                .textAlign(TextAlign.Center)
                 .fontFamily("JakartaSans")
                 .toAttrs()
         ) {
@@ -288,7 +289,6 @@ fun briefDescription(modifier: Modifier = Modifier) {
                 .fontSize(16.px)
                 .lineHeight(1.5.em)
                 .margin(all = 0.px)
-                .textAlign(TextAlign.Center)
                 .fontFamily("JakartaSans")
                 .toAttrs()
         ) {
@@ -312,7 +312,7 @@ fun downloadBox(modifier: Modifier) {
     var brewDialog = "brew --cask install amie"
     var curlDialog = "curl -sSl github.com/amie"
     var gitDialog = "git clone github.com/amie"
-    var activeType by remember { mutableStateOf(DownloadType.BREW) }
+    var activeType by remember { mutableStateOf(DownloadType.GIT) }
 
 
     Box(
@@ -337,22 +337,22 @@ fun downloadBox(modifier: Modifier) {
                 .width(490.px)
                 .height(120.px)
         ) {
-                Button(
-                    attrs = downloadButtons
-                        .fontFamily("JakartaSans")
-                        .onClick { activeType = DownloadType.BREW }
-                        .toAttrs()
-                ) {
-                    Text("Brew")
-                }
-
-                Button(
-                    attrs = downloadButtons
-                        .onClick { activeType = DownloadType.CURL }
-                        .toAttrs()
-                ) {
-                    Text("Curl")
-                }
+//                Button(
+//                    attrs = downloadButtons
+//                        .fontFamily("JakartaSans")
+//                        .onClick { activeType = DownloadType.BREW }
+//                        .toAttrs()
+//                ) {
+//                    Text("Brew")
+//                }
+//
+//                Button(
+//                    attrs = downloadButtons
+//                        .onClick { activeType = DownloadType.CURL }
+//                        .toAttrs()
+//                ) {
+//                    Text("Curl")
+//                }
 
                 Button(
                     attrs = downloadButtons
@@ -383,10 +383,28 @@ fun downloadBox(modifier: Modifier) {
                             Span(attrs = Modifier.fontFamily("JakartaSans").toAttrs()) {
                                 Text(curlDialog)
                             }
+                            Button(
+                                attrs = Modifier
+                                    .onClick {
+                                        window.navigator.clipboard.writeText(brewDialog)
+                                    }
+                                    .toAttrs()
+                            ) {
+                                FaCopy()
+                            }
                         }
                         DownloadType.GIT -> {
                             Span(attrs = Modifier.fontFamily("JakartaSans").toAttrs()) {
                             Text(gitDialog)
+                            }
+                            Button(
+                                attrs = Modifier
+                                    .onClick {
+                                        window.navigator.clipboard.writeText(gitDialog)
+                                    }
+                                    .toAttrs()
+                            ) {
+                                FaCopy()
                             }
                         }
                     }
@@ -394,6 +412,14 @@ fun downloadBox(modifier: Modifier) {
             }
     }
 }
+
+//            Img(
+//                src = "astroWallpaper.png", attrs = Modifier
+//                    .width(50.vh)
+//                    .height(30.vh)
+//                    .padding(top = 50.vh)
+//                    .toAttrs()
+//            )
 
 @Composable
 fun Pipe(txt: String, composableComponent: (@Composable (Modifier) -> Unit)? = null) {
@@ -411,18 +437,12 @@ fun Pipe(txt: String, composableComponent: (@Composable (Modifier) -> Unit)? = n
                 .fillMaxHeight()
                 .backgroundColor(Colors.White)
         ) {
-            Img(
-                src = "astroWallpaper.png", attrs = Modifier
-                    .width(50.vh)
-                    .height(30.vh)
-                    .padding(top = 50.vh)
-                    .toAttrs()
-            )
+
         }
         Box {
-        composableComponent?.invoke(Modifier)
-        Text("$txt")
-    }
+            composableComponent?.invoke(Modifier)
+            Text("$txt")
+        }
     }
 }
 
