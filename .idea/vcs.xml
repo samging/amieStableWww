@@ -3,5 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/stableWeb" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/stableWeb/amieAppStable" vcs="Git" />
   </component>
 </project>

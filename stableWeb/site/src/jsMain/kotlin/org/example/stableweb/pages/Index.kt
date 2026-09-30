@@ -311,7 +311,7 @@ fun briefDocumentation(modifier: Modifier) {
 fun downloadBox(modifier: Modifier) {
     var brewDialog = "brew --cask install amie"
     var curlDialog = "curl -sSl github.com/amie"
-    var gitDialog = "git clone github.com/amie"
+    var gitDialog = "git clone https://github.com/samging/amieAppStable.git && cd amieAppStable && cd amie\\ application/ && ./gradlew desktopApp:run"
     var activeType by remember { mutableStateOf(DownloadType.GIT) }
 
 
